@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevCircuit - Tech Store 🛍️
 
-## Getting Started
+A modern, full-stack e-commerce application built with **Next.js 14**, **Supabase**, and **Tailwind CSS**. Features real-time stock updates, secure payments via Midtrans, and a comprehensive admin dashboard.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Customer Features
+- **Product Browsing**: Filter by category, search, and sort products.
+- **Real-Time Stock**: See live stock levels; "Add to Cart" disables instantly when out of stock.
+- **Shopping Cart**: smooth cart management with local persistence.
+- **Checkout System**: Secure checkout with shipping details.
+- **Payment Integration**: Integrated with **Midtrans** for real payments (Support for manual refresh if preferred).
+- **Order Tracking**: Receive email confirmations (via Resend) and track order status.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Admin Dashboard 🛡️
+- **Dashboard Overview**: Monitor orders and products.
+- **Product Management**: Create, Read, Update, Delete (CRUD) products with image upload.
+- **Order Management**: View all orders, update statuses (Paid, Shipped, Cancelled).
+- **Secure Access**: Role-based access control (RBAC) protecting admin routes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router, Server Actions)
+- **Database**: [Supabase](https://supabase.com/) (PostgreSQL + Realtime)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Payment Gateway**: [Midtrans](https://midtrans.com/)
+- **Email**: [Resend](https://resend.com/) + [React Email](https://react.email/)
 
-## Learn More
+## ⚙️ Setup & Installation
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/Riza-FP/DevCircuit.git
+    cd quickshop
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  **Environment Variables**:
+    Copy `.env.example` to `.env.local` and fill in your credentials.
+    ```bash
+    cp .env.example .env.local
+    ```
 
-## Deploy on Vercel
+4.  **Database Setup (Supabase)**:
+    -   Create a new Supabase project.
+    -   Run the SQL scripts provided in `database/schema.sql` (if available) or use the migration files.
+    -   **Important**: Enable Realtime for `products` and `orders` tables in Supabase Dashboard > Database > Replication.
+    -   Create a Storage Bucket named `products` and set up RLS policies for public read/authenticated upload.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5.  **Run the development server**:
+    ```bash
+    npm run dev
+    ```
+    Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Deployment
+
+Deploy easily to **Vercel**:
+1.  Push your code to GitHub.
+2.  Import project into Vercel.
+3.  Add the Environment Variables from `.env.local`.
+4.  Deploy!
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
