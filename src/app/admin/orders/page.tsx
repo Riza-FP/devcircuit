@@ -39,12 +39,11 @@ export default async function AdminOrdersPage({
             )
         `);
 
-    // --- Search Filter (Order ID) ---
+    // --- Search Filter (Name, Email) ---
     if (params.search) {
-        // Fix: UUIDs cannot be searched with ilike directly unless cast to text
-        query = query.or(`id.eq.${params.search},id.ilike.%${params.search}%`); // Try exact match first, then casting if supported or text search on other fields if we had them. 
-        // Actually, simplest fix for UUID search is casting.
-        query = query.ilike('id::text', `%${params.search}%`);
+        // Search by Customer Name or Email within shipping_details JSONB
+        const searchTerm = params.search;
+        query = query.or(`shipping_details->>name.ilike.%${searchTerm}%,shipping_details->>email.ilike.%${searchTerm}%`);
     }
 
     // --- Status Filter ---
@@ -66,7 +65,7 @@ export default async function AdminOrdersPage({
             </div>
 
             <AdminToolbar
-                searchPlaceholder="Search by Order ID..."
+                searchPlaceholder="Search Name or Email..."
                 filterOptions={[
                     { label: 'Pending', value: 'pending' },
                     { label: 'Paid', value: 'paid' },
