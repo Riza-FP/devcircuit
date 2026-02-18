@@ -13,6 +13,8 @@ import { useAuthStore } from "@/store/use-auth-store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/use-cart-store";
+import { useState } from "react";
+import { Loader2, Check } from "lucide-react";
 
 import { useProductRealtime } from '@/hooks/use-product-realtime';
 
@@ -22,9 +24,31 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
     const liveProduct = useProductRealtime(product);
-    const addItem = useCartStore((state) => state.addItem);
+    const { addItem, items } = useCartStore();
     const user = useAuthStore((state) => state.user);
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const isInCart = items.some(item => item.id === liveProduct?.id);
+
+    const handleAddToCart = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!user) {
+            toast.error("Please log in to add items to cart");
+            router.push('/login');
+            return;
+        }
+
+        if (!liveProduct) return;
+
+        setIsLoading(true);
+        // Simulate a brief delay for visual feedback
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await addItem(liveProduct);
+        setIsLoading(false);
+    };
 
     if (!liveProduct) return null; // Product deleted
 
@@ -84,21 +108,20 @@ export function ProductCard({ product }: ProductCardProps) {
                 </div>
 
                 <Button
-                    disabled={liveProduct.stock === 0}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        if (!user) {
-                            toast.error("Please log in to add items to cart");
-                            router.push('/login');
-                            return;
-                        }
-                        addItem(liveProduct);
-                    }}
+                    disabled={liveProduct.stock === 0 || isLoading}
+                    onClick={handleAddToCart}
                     size="sm"
-                    className="gap-2 transition-transform hover:scale-105"
+                    variant={isInCart ? "secondary" : "default"}
+                    className={`gap-2 transition-transform hover:scale-105 ${isInCart ? 'border-primary/50 border' : ''}`}
                 >
-                    <ShoppingCart size={16} />
-                    Add
+                    {isLoading ? (
+                        <Loader2 size={16} className="animate-spin" />
+                    ) : isInCart ? (
+                        <Check size={16} className="text-primary" />
+                    ) : (
+                        <ShoppingCart size={16} />
+                    )}
+                    {isLoading ? 'Adding...' : isInCart ? 'In Cart' : 'Add'}
                 </Button>
             </CardFooter>
         </Card>

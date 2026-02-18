@@ -63,19 +63,21 @@ export default function CheckoutPage() {
                     },
                     onError: function (_: any) {
                         toast.error('Payment failed!');
+                        setIsLoading(false);
                     },
                     onClose: function () {
                         toast('You closed the popup without finishing the payment');
+                        setIsLoading(false);
                     }
                 });
             } else {
                 toast.error("Failed to get payment token");
+                setIsLoading(false);
             }
 
         } catch (error: any) {
             console.error(error);
             toast.error(error.message || 'Something went wrong');
-        } finally {
             setIsLoading(false);
         }
     };

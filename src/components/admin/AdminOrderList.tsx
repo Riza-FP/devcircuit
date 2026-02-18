@@ -187,9 +187,29 @@ export default function AdminOrderList({ initialOrders = [] }: { initialOrders?:
                                                         <DialogClose asChild>
                                                             <Button variant="outline">Cancel</Button>
                                                         </DialogClose>
-                                                        <DialogClose asChild>
-                                                            <Button onClick={() => handleRejectCancellation(order.id)}>Confirm Reject</Button>
-                                                        </DialogClose>
+                                                        <Button
+                                                            onClick={async (e) => {
+                                                                // Prevent dialog close by not using DialogClose wrapper
+                                                                // We rely on the button to trigger action, then we need to close it.
+                                                                // Since we are inside a map, controlling state for each dialog is hard.
+                                                                // Easier hack: keep DialogClose but don't expect to see loading inside it if it closes instantly.
+                                                                // wait! DialogClose closes on click. 
+                                                                // If I remove DialogClose, the dialog won't close.
+                                                                // I need to use 'open' state but it's hard in a loop.
+                                                                // detailed fix: extract to a sub-component <OrderActionDialog order={order} />
+                                                                await handleRejectCancellation(order.id);
+                                                            }}
+                                                            disabled={!!updatingId}
+                                                        >
+                                                            {updatingId === order.id ? (
+                                                                <>
+                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                    Rejecting...
+                                                                </>
+                                                            ) : (
+                                                                'Confirm Reject'
+                                                            )}
+                                                        </Button>
                                                     </DialogFooter>
                                                 </DialogContent>
                                             </Dialog>
@@ -215,9 +235,22 @@ export default function AdminOrderList({ initialOrders = [] }: { initialOrders?:
                                                         <DialogClose asChild>
                                                             <Button variant="outline">Cancel</Button>
                                                         </DialogClose>
-                                                        <DialogClose asChild>
-                                                            <Button variant="destructive" onClick={() => handleApproveCancellation(order.id)}>Confirm Cancel Order</Button>
-                                                        </DialogClose>
+                                                        <Button
+                                                            variant="destructive"
+                                                            onClick={async () => {
+                                                                await handleApproveCancellation(order.id);
+                                                            }}
+                                                            disabled={!!updatingId}
+                                                        >
+                                                            {updatingId === order.id ? (
+                                                                <>
+                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                    Cancelling...
+                                                                </>
+                                                            ) : (
+                                                                'Confirm Cancel Order'
+                                                            )}
+                                                        </Button>
                                                     </DialogFooter>
                                                 </DialogContent>
                                             </Dialog>

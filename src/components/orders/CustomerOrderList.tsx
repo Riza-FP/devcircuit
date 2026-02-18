@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Package, ShoppingBag } from 'lucide-react';
+import { Package, ShoppingBag, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
     Dialog,
@@ -17,6 +17,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogClose,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { requestCancellation } from '@/actions/orders';
@@ -38,6 +39,61 @@ type Order = {
     user_id: string;
     items: OrderItem[];
 };
+
+function CancellationForm({ orderId }: { orderId: string }) {
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+        const formData = new FormData(e.currentTarget);
+        const reason = formData.get('reason') as string;
+
+        if (!reason) {
+            toast.error('Please provide a reason');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            await requestCancellation(orderId, reason);
+            toast.success('Cancellation requested');
+            // Close dialog logic is implicit or handled by parent re-render/toast? 
+            // The parent component doesn't necessarily close the dialog automatically unless we control it.
+            // But usually the form submission success is enough for now.
+        } catch (error) {
+            toast.error('Failed to request cancellation');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                    <label htmlFor="reason" className="text-sm font-medium">Reason for Cancellation</label>
+                    <Textarea id="reason" name="reason" placeholder="Changed my mind, found a better price, etc." required disabled={loading} />
+                </div>
+            </div>
+            <DialogFooter>
+                <DialogClose asChild>
+                    <Button type="button" variant="outline" disabled={loading}>Cancel</Button>
+                </DialogClose>
+                <Button type="submit" variant="destructive" disabled={loading}>
+                    {loading ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Submitting...
+                        </>
+                    ) : (
+                        'Submit Request'
+                    )}
+                </Button>
+            </DialogFooter>
+        </form>
+    );
+}
 
 interface CustomerOrderListProps {
     initialOrders: Order[];

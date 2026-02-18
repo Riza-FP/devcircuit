@@ -9,9 +9,10 @@ import Image from 'next/image';
 import { formatCurrency } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { deleteProduct } from '@/app/admin/products/actions';
+import { useState } from 'react';
 import { useRealtimeProductList } from '@/hooks/use-realtime-product-list';
 import {
     AlertDialog,
@@ -28,15 +29,10 @@ import {
 function ProductRow({ product }: { product: Product }) {
     const live = useProductRealtime(product);
 
-    if (!live) return null; // deleted from list
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-    const handleDelete = async () => {
-        toast.promise(deleteProduct(live.id), {
-            loading: 'Deleting...',
-            success: 'Product deleted',
-            error: 'Failed to delete'
-        });
-    };
+    if (!live) return null; // deleted from list
 
     return (
         <TableRow>
@@ -60,7 +56,7 @@ function ProductRow({ product }: { product: Product }) {
                             <Edit size={16} />
                         </Button>
                     </Link>
-                    <AlertDialog>
+                    <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                         <AlertDialogTrigger asChild>
                             <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive hover:bg-destructive/10">
                                 <Trash2 size={16} />
@@ -76,10 +72,33 @@ function ProductRow({ product }: { product: Product }) {
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDelete} variant="destructive">
-                                    Delete
-                                </AlertDialogAction>
+                                <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                                <Button
+                                    variant="destructive"
+                                    disabled={isDeleting}
+                                    onClick={async (e) => {
+                                        e.preventDefault();
+                                        setIsDeleting(true);
+                                        try {
+                                            await deleteProduct(live.id);
+                                            toast.success('Product deleted');
+                                            setIsDeleteDialogOpen(false);
+                                        } catch (error) {
+                                            toast.error('Failed to delete');
+                                        } finally {
+                                            setIsDeleting(false);
+                                        }
+                                    }}
+                                >
+                                    {isDeleting ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Deleting...
+                                        </>
+                                    ) : (
+                                        'Delete'
+                                    )}
+                                </Button>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>

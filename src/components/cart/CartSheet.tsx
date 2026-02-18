@@ -16,6 +16,27 @@ export function CartSheet() {
     const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
     const [isLoading, setIsLoading] = useState(false);
+    const [loadingItems, setLoadingItems] = useState<Record<string, string>>({}); // itemId -> specific action ('minus', 'plus', 'remove') OR just simple loading state
+
+    const handleQuantityUpdate = async (itemId: string, newQuantity: number, action: 'plus' | 'minus') => {
+        setLoadingItems(prev => ({ ...prev, [itemId]: action }));
+        await updateQuantity(itemId, newQuantity);
+        setLoadingItems(prev => {
+            const next = { ...prev };
+            delete next[itemId];
+            return next;
+        });
+    };
+
+    const handleRemoveItem = async (itemId: string) => {
+        setLoadingItems(prev => ({ ...prev, [itemId]: 'remove' }));
+        await removeItem(itemId);
+        setLoadingItems(prev => {
+            const next = { ...prev };
+            delete next[itemId];
+            return next;
+        });
+    };
 
     return (
         <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -60,28 +81,30 @@ export function CartSheet() {
                                                     variant="outline"
                                                     size="icon"
                                                     className="h-7 w-7"
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                    onClick={() => handleQuantityUpdate(item.id, item.quantity - 1, 'minus')}
+                                                    disabled={loadingItems[item.id] !== undefined}
                                                 >
-                                                    <Minus size={12} />
+                                                    {loadingItems[item.id] === 'minus' ? <Loader2 size={12} className="animate-spin" /> : <Minus size={12} />}
                                                 </Button>
                                                 <span className="text-sm w-6 text-center tabular-nums">{item.quantity}</span>
                                                 <Button
                                                     variant="outline"
                                                     size="icon"
                                                     className="h-7 w-7"
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    disabled={item.quantity >= item.stock}
+                                                    onClick={() => handleQuantityUpdate(item.id, item.quantity + 1, 'plus')}
+                                                    disabled={item.quantity >= item.stock || loadingItems[item.id] !== undefined}
                                                 >
-                                                    <Plus size={12} />
+                                                    {loadingItems[item.id] === 'plus' ? <Loader2 size={12} className="animate-spin" /> : <Plus size={12} />}
                                                 </Button>
                                             </div>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
-                                                onClick={() => removeItem(item.id)}
+                                                onClick={() => handleRemoveItem(item.id)}
+                                                disabled={loadingItems[item.id] !== undefined}
                                             >
-                                                <Trash2 size={14} />
+                                                {loadingItems[item.id] === 'remove' ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                                             </Button>
                                         </div>
                                     </div>

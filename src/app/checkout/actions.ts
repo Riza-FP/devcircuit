@@ -114,25 +114,25 @@ export async function createOrder(cartItems: CartItemInput[], formData: FormData
     }
 
     // 5.5 Decrement Stock (Reservation)
+    // 5.5 Decrement Stock (Reservation)
     for (const item of orderItemsData) {
         const { error: stockError } = await supabase.rpc('decrement_stock', {
             row_id: item.product_id,
             amount: item.quantity
         });
 
-        // If RPC fails (e.g. stock < 0), we have a problem.
-        // But we checked stock manually earlier.
-        // If we don't have RPC, we use update.
         if (stockError) {
             // Fallback to manual update if RPC not exists or fails
-            const { error: updateError } = await supabase
-                .from('products')
-                .update({ stock: products.find(p => p.id === item.product_id)!.stock - item.quantity })
-                .eq('id', item.product_id);
+            const currentProduct = products.find(p => p.id === item.product_id);
+            if (currentProduct) {
+                const { error: updateError } = await supabase
+                    .from('products')
+                    .update({ stock: currentProduct.stock - item.quantity })
+                    .eq('id', item.product_id);
 
-            if (updateError) {
-                console.error(`Failed to decrement stock for product ${item.product_id}:`, updateError);
-                // This is bad. We sold an item but didn't decrement stock.
+                if (updateError) {
+                    console.error(`Failed to decrement stock for product ${item.product_id}:`, updateError);
+                }
             }
         }
     }
