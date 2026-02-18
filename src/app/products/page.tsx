@@ -17,7 +17,7 @@ export default async function ProductsPage({
     const sort = params.sort || 'newest';
 
     // 1. Fetch Categories for Filter
-    const { data: categories } = await supabase.from('categories').select('id, name').order('name');
+    const { data: categories } = await supabase.from('categories').select('id, name, slug').order('name');
 
     // 2. Fetch Products
     // We need to filter by category SLUG, not ID, if the param is a slug (e.g. 'mice')

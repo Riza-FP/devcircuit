@@ -15,11 +15,14 @@ import { Input } from "@/components/ui/input";
 interface Category {
     id: string;
     name: string;
+    slug: string;
 }
 
 interface ProductFiltersProps {
     categories: Category[];
 }
+
+
 
 export function ProductFilters({ categories }: ProductFiltersProps) {
     const router = useRouter();
@@ -92,7 +95,7 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
                         <SelectContent>
                             <SelectItem value="all">All Categories</SelectItem>
                             {categories.map((cat) => (
-                                <SelectItem key={cat.id} value={cat.id}>
+                                <SelectItem key={cat.id} value={cat.slug || cat.id}>
                                     {cat.name}
                                 </SelectItem>
                             ))}
