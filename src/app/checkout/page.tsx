@@ -134,7 +134,7 @@ export default function CheckoutPage() {
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Processing...
+                                    Processing Payment...
                                 </>
                             ) : (
                                 `Pay ${formatCurrency(total)}`

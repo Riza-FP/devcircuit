@@ -20,14 +20,16 @@ export default async function ProductsPage({
     const { data: categories } = await supabase.from('categories').select('id, name').order('name');
 
     // 2. Fetch Products
-    let query = supabase.from('products').select('*');
+    // We need to filter by category SLUG, not ID, if the param is a slug (e.g. 'mice')
+    let query = supabase.from('products').select('*, category:categories!inner(id, name, slug)');
 
     if (q) {
         query = query.ilike('name', `%${q}%`);
     }
 
     if (category) {
-        query = query.eq('category_id', category);
+        // Use inner join filtering on the related table
+        query = query.eq('category.slug', category);
     }
 
     // Sort Logic

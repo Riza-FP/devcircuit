@@ -41,8 +41,10 @@ export default async function AdminOrdersPage({
 
     // --- Search Filter (Order ID) ---
     if (params.search) {
-        // Simple accurate search for Order ID
-        query = query.ilike('id', `%${params.search}%`);
+        // Fix: UUIDs cannot be searched with ilike directly unless cast to text
+        query = query.or(`id.eq.${params.search},id.ilike.%${params.search}%`); // Try exact match first, then casting if supported or text search on other fields if we had them. 
+        // Actually, simplest fix for UUID search is casting.
+        query = query.ilike('id::text', `%${params.search}%`);
     }
 
     // --- Status Filter ---

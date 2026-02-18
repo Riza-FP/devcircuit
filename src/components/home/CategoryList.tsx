@@ -2,11 +2,11 @@ import { Keyboard, Mouse, Monitor, Headphones, HardDrive, Smartphone } from 'luc
 import Link from 'next/link';
 
 const categories = [
-    { name: 'Keyboards', icon: Keyboard, href: '/#products', color: 'bg-pink-500/10 text-pink-500' },
-    { name: 'Mice', icon: Mouse, href: '/#products', color: 'bg-cyan-500/10 text-cyan-500' },
-    { name: 'Audio', icon: Headphones, href: '/#products', color: 'bg-indigo-500/10 text-indigo-500' },
-    { name: 'Monitors', icon: Monitor, href: '/#products', color: 'bg-orange-500/10 text-orange-500' },
-    { name: 'Accessories', icon: HardDrive, href: '/#products', color: 'bg-emerald-500/10 text-emerald-500' },
+    { name: 'Keyboards', icon: Keyboard, href: '/products?category=keyboards', color: 'bg-pink-500/10 text-pink-500' },
+    { name: 'Mice', icon: Mouse, href: '/products?category=mice', color: 'bg-cyan-500/10 text-cyan-500' },
+    { name: 'Audio', icon: Headphones, href: '/products?category=audio', color: 'bg-indigo-500/10 text-indigo-500' },
+    { name: 'Monitors', icon: Monitor, href: '/products?category=monitors', color: 'bg-orange-500/10 text-orange-500' },
+    { name: 'Accessories', icon: HardDrive, href: '/products?category=accessories', color: 'bg-emerald-500/10 text-emerald-500' },
 ];
 
 export function CategoryList() {
@@ -14,9 +14,6 @@ export function CategoryList() {
         <section className="mb-16">
             <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl font-bold text-foreground">Browse Categories</h2>
-                <div className="flex gap-2">
-                    {/* Navigation arrows could go here */}
-                </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
