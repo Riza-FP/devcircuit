@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
                         const { OrderConfirmationEmail } = await import('@/emails/OrderConfirmation');
 
                         await resend.emails.send({
-                            from: 'QuickShop <onboarding@resend.dev>', // Use this for testing
+                            from: 'DevCircuit <onboarding@resend.dev>', // Use this for testing
                             to: orderData.shipping_details.email, // Use email from shipping details
                             subject: `Order Confirmation #${orderId.slice(0, 8)}`,
                             react: OrderConfirmationEmail({
