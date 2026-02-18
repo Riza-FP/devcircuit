@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Package, ShoppingBag } from 'lucide-react';
 
 interface AdminNavProps {
     userEmail?: string;
@@ -23,15 +24,13 @@ export function AdminNav({ userEmail }: AdminNavProps) {
 
     return (
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container px-4 md:px-6 py-4 mx-auto space-y-4">
+            <div className="container px-4 md:px-6 py-4 mx-auto space-y-4 flex flex-col items-center">
                 {/* Top Row: Title + User */}
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <Link href="/admin" className="font-bold text-2xl tracking-tight hover:text-primary transition-colors">
-                            Admin Dashboard
-                        </Link>
-                    </div>
-                    <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-full relative">
+                    <Link href="/admin" className="font-bold text-2xl tracking-tight hover:text-primary transition-colors text-center">
+                        Admin Dashboard
+                    </Link>
+                    <div className="absolute right-0 flex items-center gap-4">
                         <span className="text-sm text-muted-foreground hidden md:inline-block">
                             {userEmail}
                         </span>
@@ -40,7 +39,7 @@ export function AdminNav({ userEmail }: AdminNavProps) {
                 </div>
 
                 {/* Bottom Row: Tabs */}
-                <Tabs value={activeTab} className="w-full">
+                <Tabs value={activeTab} className="w-full flex items-center">
                     <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
                         <TabsTrigger value="orders" asChild>
                             <Link href="/admin/orders">Orders</Link>

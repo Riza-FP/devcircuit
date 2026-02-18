@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 
 export default function RegisterPage() {
     const [email, setEmail] = useState("");
@@ -113,7 +114,12 @@ export default function RegisterPage() {
                             />
                         </div>
                         <Button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium" disabled={loading}>
-                            {loading ? "Creating account..." : "Register"}
+                            {loading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Creating account...
+                                </>
+                            ) : "Register"}
                         </Button>
                     </form>
 

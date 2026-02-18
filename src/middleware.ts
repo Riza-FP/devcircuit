@@ -35,26 +35,14 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh session if expired - required for Server Components
-  // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
-
-  // Only fetch user if we're on a protected route
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/admin') ||
-    request.nextUrl.pathname.startsWith('/checkout') ||
-    request.nextUrl.pathname.startsWith('/orders');
-
-  if (!isProtectedRoute) {
-    return response;
-  }
-
   const { data: { user } } = await supabase.auth.getUser();
 
-  // 1. If it's an admin route, we need to check the 'profiles' table
+  // Protect Admin Routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    // Fetch the role from your public.profiles table
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
@@ -62,25 +50,29 @@ export async function middleware(request: NextRequest) {
       .single();
 
     if (profile?.role !== 'admin') {
-      // Redirect non-admins to the home page
       return NextResponse.redirect(new URL('/', request.url));
     }
-
-    // Early return for admin routes - no need to check customer routes
-    return response;
   }
 
-  // 2. Protect Customer Routes (Standard login check)
-  const isCustomerRoute = request.nextUrl.pathname.startsWith('/checkout') ||
-    request.nextUrl.pathname.startsWith('/orders')
-
-  if (isCustomerRoute && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Protect Customer Routes
+  if (request.nextUrl.pathname.startsWith('/checkout') || request.nextUrl.pathname.startsWith('/orders')) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
   }
 
-  return response
+  return response;
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/checkout/:path*', '/orders/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 }

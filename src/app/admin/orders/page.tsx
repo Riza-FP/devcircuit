@@ -1,8 +1,14 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import AdminOrderList from '@/components/admin/AdminOrderList';
+import { AdminToolbar } from '@/components/admin/AdminToolbar';
 
-export default async function AdminOrdersPage() {
+export default async function AdminOrdersPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const params = await searchParams;
     const cookieStore = await cookies();
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,7 +29,7 @@ export default async function AdminOrdersPage() {
         }
     );
 
-    const { data: orders } = await supabase
+    let query = supabase
         .from('orders')
         .select(`
             *,
@@ -31,14 +37,47 @@ export default async function AdminOrdersPage() {
                 *,
                 product:products(*)
             )
-        `)
-        .order('created_at', { ascending: false });
+        `);
+
+    // --- Search Filter (Order ID) ---
+    if (params.search) {
+        // Simple accurate search for Order ID
+        query = query.ilike('id', `%${params.search}%`);
+    }
+
+    // --- Status Filter ---
+    if (params.status && params.status !== 'all') {
+        query = query.eq('status', params.status);
+    }
+
+    // --- Sort ---
+    const isAscending = params.sort === 'oldest';
+    query = query.order('created_at', { ascending: isAscending });
+
+
+    const { data: orders } = await query;
 
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Order Management</h2>
             </div>
+
+            <AdminToolbar
+                searchPlaceholder="Search by Order ID..."
+                filterOptions={[
+                    { label: 'Pending', value: 'pending' },
+                    { label: 'Paid', value: 'paid' },
+                    { label: 'Shipped', value: 'shipped' },
+                    { label: 'Cancelled', value: 'cancelled' },
+                ]}
+                sortOptions={[
+                    { label: 'Newest First', value: 'newest' },
+                    { label: 'Oldest First', value: 'oldest' },
+                ]}
+                filterKey="status"
+            />
+
             <AdminOrderList initialOrders={orders || []} />
         </div>
     );

@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { formatCurrency } from '@/lib/utils';
 import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 
 declare global {
     interface Window {
@@ -130,7 +131,14 @@ export default function CheckoutPage() {
                         </div>
 
                         <Button type="submit" className="w-full mt-6" disabled={isLoading} size="lg">
-                            {isLoading ? 'Processing...' : `Pay ${formatCurrency(total)}`}
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Processing...
+                                </>
+                            ) : (
+                                `Pay ${formatCurrency(total)}`
+                            )}
                         </Button>
                     </form>
                 </div>

@@ -5,6 +5,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Toaster } from "sonner";
 import { SupabaseProvider } from "@/components/providers/supabase-provider";
 import { RealtimeProductsProvider } from "@/components/providers/realtime-products-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Footer } from "@/components/layout/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,16 +29,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SupabaseProvider>
           <RealtimeProductsProvider>
-            <Navbar />
-            <main className="min-h-screen">
-              {children}
-            </main>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
+              <main className="min-h-screen pb-16 md:pb-0">
+                {children}
+              </main>
+              <Footer />
+            </ThemeProvider>
           </RealtimeProductsProvider>
         </SupabaseProvider>
         <Toaster position="top-right" richColors />

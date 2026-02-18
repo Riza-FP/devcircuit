@@ -42,7 +42,7 @@ export function HeroSection() {
                             Shop Now <ArrowRight size={18} />
                         </Link>
                         <Link
-                            href="/#about"
+                            href="/about"
                             className="rounded-full bg-white/10 px-8 py-4 text-base font-semibold text-white shadow-sm hover:bg-white/20 ring-1 ring-inset ring-white/20 backdrop-blur-md transition-all flex items-center justify-center"
                         >
                             Learn More

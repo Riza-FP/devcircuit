@@ -13,7 +13,7 @@ export function CategoryList() {
     return (
         <section className="mb-16">
             <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-white">Browse Categories</h2>
+                <h2 className="text-2xl font-bold text-foreground">Browse Categories</h2>
                 <div className="flex gap-2">
                     {/* Navigation arrows could go here */}
                 </div>
@@ -24,12 +24,12 @@ export function CategoryList() {
                     <Link
                         key={category.name}
                         href={category.href}
-                        className="flex flex-col items-center justify-center p-6 rounded-xl border border-white/5 bg-slate-900/50 hover:bg-slate-800 hover:border-white/10 transition-all group"
+                        className="flex flex-col items-center justify-center p-6 rounded-xl border border-border bg-card hover:bg-accent hover:text-accent-foreground transition-all group"
                     >
                         <div className={`mb-4 p-4 rounded-full ${category.color} group-hover:scale-110 transition-transform duration-300`}>
                             <category.icon size={28} />
                         </div>
-                        <span className="font-medium text-slate-300 group-hover:text-white transition-colors">{category.name}</span>
+                        <span className="font-medium text-muted-foreground group-hover:text-foreground transition-colors">{category.name}</span>
                     </Link>
                 ))}
             </div>

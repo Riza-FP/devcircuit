@@ -7,13 +7,15 @@ import { useCartStore } from "@/store/use-cart-store";
 import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export function CartSheet() {
     const { items, removeItem, updateQuantity, isOpen, setOpen } = useCartStore();
     const router = useRouter();
     const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
+    const [isLoading, setIsLoading] = useState(false);
 
     return (
         <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -92,11 +94,19 @@ export function CartSheet() {
                                 <span>Total</span>
                                 <span>{formatCurrency(total)}</span>
                             </div>
-                            <Button className="w-full" size="lg" onClick={() => {
+                            <Button className="w-full" size="lg" disabled={isLoading} onClick={() => {
+                                setIsLoading(true);
                                 setOpen(false);
                                 router.push('/checkout');
                             }}>
-                                Checkout
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Processing...
+                                    </>
+                                ) : (
+                                    'Checkout'
+                                )}
                             </Button>
                         </div>
                     </>

@@ -32,7 +32,7 @@ export default async function AdminLayout({
     return (
         <div className="flex min-h-screen flex-col">
             <AdminNav userEmail={user.email} />
-            <main className="flex-1 container py-6 mx-auto">{children}</main>
+            <main className="flex-1 container py-6 mx-auto pb-24 md:pb-6">{children}</main>
         </div >
     );
 }

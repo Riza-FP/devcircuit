@@ -37,9 +37,6 @@ export function PromoGrid() {
                             <BatteryCharging size={20} className="text-green-400" />
                         </div>
                     </div>
-                    <Link href="/#products" className="text-cyan-400 hover:text-cyan-300 font-medium inline-flex items-center gap-1 transition-colors">
-                        View Details &rarr;
-                    </Link>
                 </div>
                 <div className="absolute right-0 top-0 h-32 w-32 bg-cyan-500/20 blur-[60px] rounded-full pointer-events-none" />
                 <Monitor className="absolute -bottom-4 -right-4 text-white/5 h-40 w-40 group-hover:scale-110 transition-transform duration-500" />
