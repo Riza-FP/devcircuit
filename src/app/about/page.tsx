@@ -5,7 +5,7 @@ export default function AboutPage() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* 1. Hero Section */}
-            <section className="relative overflow-hidden py-20 sm:py-32 bg-slate-900 border-b border-white/10">
+            <section className="relative overflow-hidden py-20 sm:py-32 bg-slate-900 border-b border-white/10 animate-fade-in-up opacity-0">
                 <div className="absolute inset-0 z-0 opacity-20">
                     <div className="absolute inset-0 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
                 </div>
@@ -25,7 +25,7 @@ export default function AboutPage() {
             </section>
 
             {/* 2. Our Mission */}
-            <section className="py-20 px-4">
+            <section className="py-20 px-4 animate-fade-in-up opacity-0" style={{ animationDelay: '100ms' }}>
                 <div className="container mx-auto max-w-6xl">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                         <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl skew-y-3 hover:skew-y-0 transition-transform duration-500">
@@ -70,7 +70,7 @@ export default function AboutPage() {
             </section>
 
             {/* 3. Values Grid */}
-            <section className="py-20 px-4 bg-muted/30">
+            <section className="py-20 px-4 bg-muted/30 animate-fade-in-up opacity-0" style={{ animationDelay: '200ms' }}>
                 <div className="container mx-auto max-w-6xl text-center">
                     <h2 className="text-3xl font-bold mb-16">Why We Do It</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -106,7 +106,7 @@ export default function AboutPage() {
             </section>
 
             {/* 4. Team CTA */}
-            <section className="py-20 px-4 text-center">
+            <section className="py-20 px-4 text-center animate-fade-in-up opacity-0" style={{ animationDelay: '300ms' }}>
                 <div className="container mx-auto max-w-4xl p-12 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl relative overflow-hidden">
                     <div className="relative z-10">
                         <Users className="w-16 h-16 mx-auto mb-6 text-cyan-400" />

@@ -41,12 +41,12 @@ export function CartSheet() {
     return (
         <Sheet open={isOpen} onOpenChange={setOpen}>
             <SheetContent className="w-full sm:max-w-md flex flex-col h-full">
-                <SheetHeader>
+                <SheetHeader className="px-4 sm:px-6 pt-6 pb-2">
                     <SheetTitle>Shopping Cart ({totalItems} items)</SheetTitle>
                 </SheetHeader>
 
                 {items.length === 0 ? (
-                    <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-4">
+                    <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-4 px-4 sm:px-6">
                         <ShoppingBag size={48} className="opacity-20" />
                         <p>Your cart is empty</p>
                         <Button variant="outline" onClick={() => setOpen(false)}>
@@ -55,7 +55,7 @@ export function CartSheet() {
                     </div>
                 ) : (
                     <>
-                        <div className="flex-1 overflow-y-auto py-4 -mx-6 px-6 space-y-6">
+                        <div className="flex-1 overflow-y-auto py-2 px-4 sm:px-6 space-y-6">
                             {items.map((item) => (
                                 <div key={item.id} className="flex gap-4">
                                     <div className="relative h-20 w-20 rounded-md overflow-hidden bg-muted flex-shrink-0 border border-border">
@@ -112,7 +112,7 @@ export function CartSheet() {
                             ))}
                         </div>
 
-                        <div className="border-t border-border pt-4 space-y-4">
+                        <div className="border-t border-border p-4 sm:p-6 mt-auto space-y-4">
                             <div className="flex items-center justify-between font-bold text-lg">
                                 <span>Total</span>
                                 <span>{formatCurrency(total)}</span>

@@ -23,8 +23,14 @@ export function ProductGrid({ products: initialProducts }: ProductGridProps) {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+            {products.map((product, index) => (
+                <div 
+                    key={product.id} 
+                    className="animate-fade-in-up opacity-0 h-full" 
+                    style={{ animationDelay: `${index * 100}ms` }}
+                >
+                    <ProductCard product={product} />
+                </div>
             ))}
         </div>
     );

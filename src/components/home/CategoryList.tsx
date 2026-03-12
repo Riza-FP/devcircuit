@@ -12,16 +12,17 @@ const categories = [
 export function CategoryList() {
     return (
         <section className="mb-16">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-8 animate-fade-in-up opacity-0" style={{ animationDelay: '100ms' }}>
                 <h2 className="text-2xl font-bold text-foreground">Browse Categories</h2>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                {categories.map((category) => (
+                {categories.map((category, index) => (
                     <Link
                         key={category.name}
                         href={category.href}
-                        className="flex flex-col items-center justify-center p-6 rounded-xl border border-border bg-card hover:bg-accent hover:text-accent-foreground transition-all group"
+                        className="flex flex-col items-center justify-center p-6 rounded-xl border border-border bg-card hover:bg-accent hover:text-accent-foreground transition-all group animate-fade-in-up opacity-0"
+                        style={{ animationDelay: `${150 + (index * 50)}ms` }}
                     >
                         <div className={`mb-4 p-4 rounded-full ${category.color} group-hover:scale-110 transition-transform duration-300`}>
                             <category.icon size={28} />

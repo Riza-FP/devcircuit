@@ -66,7 +66,7 @@ export default async function AdminProductsPage({
     const filterOptions = categories?.map(c => ({ label: c.name, value: c.id })) || [];
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 animate-fade-in-up">
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Product Management</h2>
                 <Link href="/admin/products/new">

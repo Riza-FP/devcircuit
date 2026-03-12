@@ -29,7 +29,7 @@ export default async function Home() {
       <CategoryList />
 
       {/* 4. Product Grid (New Arrivals) */}
-      <section id="products" className="mt-16">
+      <section id="products" className="mt-16 animate-fade-in-up opacity-0" style={{ animationDelay: '400ms' }}>
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold tracking-tight text-foreground">New Arrivals</h2>
           <a href="/products" className="text-sm font-semibold text-cyan-400 hover:text-cyan-300">

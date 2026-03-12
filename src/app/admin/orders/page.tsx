@@ -59,7 +59,7 @@ export default async function AdminOrdersPage({
     const { data: orders } = await query;
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 animate-fade-in-up">
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Order Management</h2>
             </div>

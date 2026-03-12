@@ -12,15 +12,11 @@ interface AdminNavProps {
 
 export function AdminNav({ userEmail }: AdminNavProps) {
     const pathname = usePathname();
-    const segment = pathname?.split('/').pop() || 'orders';
-
-    // Map segment to tab value
-    // /admin/orders -> orders
-    // /admin/products -> products
-    // /admin -> orders (redirects)
-
-    // If we are in sub-routes like /admin/products/new, active tab should be products?
-    const activeTab = pathname?.includes('/products') ? 'products' : 'orders';
+    
+    // Determine active tab
+    let activeTab = 'overview';
+    if (pathname?.includes('/admin/products')) activeTab = 'products';
+    else if (pathname?.includes('/admin/orders')) activeTab = 'orders';
 
     return (
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -40,7 +36,10 @@ export function AdminNav({ userEmail }: AdminNavProps) {
 
                 {/* Bottom Row: Tabs */}
                 <Tabs value={activeTab} className="w-full flex items-center">
-                    <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+                    <TabsList className="grid w-full grid-cols-3 max-w-[400px]">
+                        <TabsTrigger value="overview" asChild>
+                            <Link href="/admin">Overview</Link>
+                        </TabsTrigger>
                         <TabsTrigger value="orders" asChild>
                             <Link href="/admin/orders">Orders</Link>
                         </TabsTrigger>

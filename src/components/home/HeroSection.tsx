@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 
 export function HeroSection() {
     return (
-        <section className="relative overflow-hidden rounded-3xl h-[600px] flex items-center shadow-2xl">
+        <section className="relative overflow-hidden rounded-3xl h-[600px] flex items-center shadow-2xl animate-fade-in-up opacity-0">
             {/* Background Image */}
             <div
                 className="absolute inset-0 z-0"

@@ -5,7 +5,7 @@ export function PromoGrid() {
     return (
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
             {/* Large Card - Special Discount */}
-            <div className="col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 p-8 shadow-xl border border-white/5 group">
+            <div className="col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 p-8 shadow-xl border border-white/5 group animate-fade-in-up opacity-0" style={{ animationDelay: '100ms' }}>
                 <div className="relative z-10 h-full flex flex-col justify-center items-start">
                     <span className="text-purple-300 font-semibold mb-2 tracking-wider text-sm uppercase">Special Offer</span>
                     <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -25,7 +25,7 @@ export function PromoGrid() {
             </div>
 
             {/* Small Card - Hot Deals */}
-            <div className="col-span-1 relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-xl border border-white/5 group">
+            <div className="col-span-1 relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-xl border border-white/5 group animate-fade-in-up opacity-0" style={{ animationDelay: '300ms' }}>
                 <div className="relative z-10">
                     <span className="text-cyan-400 font-semibold mb-2 tracking-wider text-sm uppercase">New Arrival</span>
                     <h3 className="text-2xl font-bold text-white mb-4">Ergo Mouse Series</h3>
